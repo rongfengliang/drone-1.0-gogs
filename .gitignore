@@ -1,0 +1,5 @@
+/data
+/drone
+/gogs
+docker-compose-1.0.yaml
+docker-compose-gogs-0.8.yaml
