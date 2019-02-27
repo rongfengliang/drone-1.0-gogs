@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yaml -o template
+    kompose.version: 1.17.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: drone-agent
+  name: drone-agent
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: drone-agent
+    spec:
+      containers:
+      - env:
+        - name: DOCKER_HOST
+          value: tcp://docker-bind:2375
+        - name: DRONE_DEBUG
+          value: "true"
+        - name: DRONE_RPC_SECRET
+          value: ALQU2M0KdptXUdTPKcEw
+        - name: DRONE_RPC_SERVER
+          value: http://drone-server
+        image: drone/agent:1.0.0-rc.1
+        name: drone-agent
+        resources: {}
+      restartPolicy: Always
+status: {}

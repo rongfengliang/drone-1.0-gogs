@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yaml -o template
+    kompose.version: 1.17.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gogs
+  name: gogs
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: gogs
+    spec:
+      containers:
+      - image: gogs/gogs
+        name: gogs
+        ports:
+        - containerPort: 22
+        - containerPort: 3000
+        resources: {}
+        volumeMounts:
+        - mountPath: /data
+          name: gogs-claim0
+      restartPolicy: Always
+      volumes:
+      - name: gogs-claim0
+        persistentVolumeClaim:
+          claimName: gogs-claim0
+status: {}

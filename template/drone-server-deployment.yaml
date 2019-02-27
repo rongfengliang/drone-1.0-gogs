@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yaml -o template
+    kompose.version: 1.17.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: drone-server
+  name: drone-server
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: drone-server
+    spec:
+      containers:
+      - env:
+        - name: DRONE_DATABASE_DATASOURCE
+          value: /var/lib/drone/drone.sqlite
+        - name: DRONE_DATABASE_DRIVER
+          value: sqlite3
+        - name: DRONE_DEBUG
+          value: "true"
+        - name: DRONE_GIT_ALWAYS_AUTH
+          value: "false"
+        - name: DRONE_GOGS
+          value: "true"
+        - name: DRONE_GOGS_SERVER
+          value: http://gogs.jira.yonyou.com
+        - name: DRONE_GOGS_SKIP_VERIFY
+          value: "false"
+        - name: DRONE_OPEN
+          value: "true"
+        - name: DRONE_PROVIDER
+          value: gogs
+        - name: DRONE_RPC_SECRET
+          value: ALQU2M0KdptXUdTPKcEw
+        - name: DRONE_SERVER_HOST
+          value: drone-server
+        - name: DRONE_SERVER_PROTO
+          value: http
+        image: drone/drone:1.0.0-rc.1
+        name: drone-server
+        ports:
+        - containerPort: 80
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/drone/
+          name: drone-server-claim0
+      restartPolicy: Always
+      volumes:
+      - name: drone-server-claim0
+        persistentVolumeClaim:
+          claimName: drone-server-claim0
+status: {}

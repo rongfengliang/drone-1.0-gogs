@@ -1,7 +1,7 @@
 version: '3'
 services:
   drone-server:
-    image: drone/drone:1.0.0-rc.1
+    image: drone/drone:1.0.0-rc.5
     ports:
       - "80:80"
     volumes:
@@ -42,7 +42,7 @@ services:
       MYSQL_PASSWORD: dalongrong
       TZ: Asia/Shanghai
   drone-agent:
-    image: drone/agent:1.0.0-rc.1
+    image: drone/agent:1.0.0-rc.5
     depends_on:
       - drone-server
     environment:
@@ -53,6 +53,7 @@ services:
   docker-bind:
      image: docker:dind
      privileged: true
-     command: --storage-driver=overlay
+     command: --registry-mirror=https://b3uey254.mirror.aliyuncs.com
+    # command: --storage-driver=overlay
      
 
